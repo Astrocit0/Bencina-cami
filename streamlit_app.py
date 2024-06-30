@@ -1,40 +1,16 @@
-import altair as alt
-import numpy as np
-import pandas as pd
 import streamlit as st
 
-"""
-# Welcome to Streamlit!
+def viajes(precio_bencina, numero_pasajeros, n_idas, n_vueltas):
+    precio_total = 40 / 17 * precio_bencina * (n_idas + n_vueltas) * (1 / numero_pasajeros)
+    return precio_total
 
-Edit `/streamlit_app.py` to customize this app to your heart's desire :heart:.
-If you have any questions, checkout our [documentation](https://docs.streamlit.io) and [community
-forums](https://discuss.streamlit.io).
+st.title("Calculadora de Costos de Viaje por persona a Vilcun en Auto Cami _Doña Rabias_")
 
-In the meantime, below is an example of what you can do with just a few lines of code:
-"""
+precio_bencina = st.number_input("Precio de la bencina (por litro)", min_value=0.0)
+numero_pasajeros = st.number_input("Número de pasajeros", min_value=1, step=1)
+n_idas = st.number_input("Número de idas", min_value=0, step=1)
+n_vueltas = st.number_input("Número de vueltas", min_value=0, step=1)
 
-num_points = st.slider("Number of points in spiral", 1, 10000, 1100)
-num_turns = st.slider("Number of turns in spiral", 1, 300, 31)
-
-indices = np.linspace(0, 1, num_points)
-theta = 2 * np.pi * num_turns * indices
-radius = indices
-
-x = radius * np.cos(theta)
-y = radius * np.sin(theta)
-
-df = pd.DataFrame({
-    "x": x,
-    "y": y,
-    "idx": indices,
-    "rand": np.random.randn(num_points),
-})
-
-st.altair_chart(alt.Chart(df, height=700, width=700)
-    .mark_point(filled=True)
-    .encode(
-        x=alt.X("x", axis=None),
-        y=alt.Y("y", axis=None),
-        color=alt.Color("idx", legend=None, scale=alt.Scale()),
-        size=alt.Size("rand", legend=None, scale=alt.Scale(range=[1, 150])),
-    ))
+if st.button("Calcular"):
+    costo_total = viajes(precio_bencina, numero_pasajeros, n_idas, n_vueltas)
+    st.write(f"El costo total del viaje por persona es: {costo_total}")
